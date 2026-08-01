@@ -1,0 +1,14 @@
+_ZEEN_
+
+• FABRIC _LAWN_
+• _⁠PRINT LAWN_ SHIRT
+• _⁠FANCY LAWN VOIL_ DUPATA
+• ⁠DYED / PRINT TROUSER
+• ⁠GUARANTEED STUFF 💯
+• ⁠EASILY STICHABLE CUTTING
+
+     *Whole Sale Price*
+
+_Set Price : 2650_
+
+_Single Suit : 2750_
