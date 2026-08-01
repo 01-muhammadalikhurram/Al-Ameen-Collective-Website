@@ -1,0 +1,44 @@
+:root {
+  --primary-gold: #DBB177;
+  --primary-maroon: #510F17;
+  --alert-black: #000000;
+  --alert-text: #FFFFFF;
+  --bg-color: #FAFAFA;
+  --card-bg: #FFFFFF;
+  --shadow-subtle: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: #333333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: var(--primary-maroon);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  transition: transform 0.1s ease-in-out;
+}
+
+button:active {
+  transform: scale(0.97);
+}

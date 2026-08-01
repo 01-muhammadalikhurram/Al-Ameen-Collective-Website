@@ -1,0 +1,112 @@
+datasource db {
+  provider = "mongodb"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  VENDOR
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  FILED_FOR_RETURN
+  RETURNED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  UNISEX
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  productCode        String   @unique
+  name               String
+  categories         String[]
+  gender             Gender
+  color              String
+  wholesalePrice     Float
+  summary            String
+  description        String
+  images             String[]
+  
+  brand              String?
+  productType        String?
+  fabricType         String?
+  cuttingSize        String?
+  shirtDetails       String?
+  trouserDetails     String?
+  
+  isActive           Boolean  @default(true)
+  commissionOverride Float?
+  
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Order {
+  id                  String      @id @default(auto()) @map("_id") @db.ObjectId
+  orderId             String      @unique
+  
+  customerName        String
+  customerPhone       String
+  customerWhatsapp    String
+  customerAddress     String
+  customerRemarks     String?
+  
+  deliveryCharges     Float
+  totalWholesalePrice Float
+  totalAdminCommission Float
+  totalCustomerPayable Float
+  
+  status              OrderStatus @default(PENDING)
+  commissionReceived  Boolean     @default(false)
+  
+  items               OrderItem[]
+  
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+model OrderItem {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId             String   @db.ObjectId
+  order               Order    @relation(fields: [orderId], references: [id])
+  
+  productId           String   @db.ObjectId
+  productName         String
+  productCode         String
+  productImage        String
+  
+  quantity            Int
+  
+  wholesalePriceAtTime Float
+  commissionAtTime     Float
+  sellingPriceAtTime   Float
+}
+
+model Config {
+  id                    String  @id @default(auto()) @map("_id") @db.ObjectId
+  globalCommission      Float   @default(1000)
+  baseDeliveryCharge    Float   @default(250)
+  freeDeliveryEnabled   Boolean @default(false)
+  freeDeliveryThreshold Float   @default(5000)
+}
