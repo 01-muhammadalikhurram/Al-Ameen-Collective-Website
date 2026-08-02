@@ -43,8 +43,9 @@ export default function Navbar() {
             onChange={(e) => setSearch(e.target.value)}
             style={{ padding: '0.5rem', borderRadius: '4px 0 0 4px', border: 'none', outline: 'none' }}
           />
-          <button type="submit" style={{ padding: '0.5rem 1rem', background: 'var(--primary-maroon)', color: '#fff', borderRadius: '0 4px 4px 0', border: 'none', cursor: 'pointer' }}>Search</button>
+          <button type="submit" style={{ padding: '0.5rem 1rem', background: 'var(--primary-maroon)', color: '#fff', borderRadius: '0 4px 4px 0', border: 'none', cursor: 'pointer', marginRight: '1.5rem' }}>Search</button>
         </form>
+        <Link to="/track" style={{ fontWeight: 500, marginRight: '1.5rem' }}>Track Order</Link>
         <Link to="/checkout" style={{ fontWeight: 500, position: 'relative' }}>
           Cart
           {cartCount > 0 && (

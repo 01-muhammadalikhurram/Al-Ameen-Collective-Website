@@ -48,6 +48,27 @@ export default function OrderDetail() {
           )}
         </div>
       </div>
+
+      <div style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h3 style={{ margin: 0 }}>Commission Status</h3>
+          <p style={{ margin: 0, color: order.commissionReceived ? 'green' : 'red' }}>
+            {order.commissionReceived ? '✅ Commission Received' : '❌ Commission Pending (with Vendor)'}
+          </p>
+        </div>
+        {order.status === 'DELIVERED' && !order.commissionReceived && (
+          <button 
+            onClick={() => {
+              const token = localStorage.getItem('token');
+              axios.patch(`http://localhost:5000/api/orders/admin/${id}/status`, { commissionReceived: true }, {
+                headers: { Authorization: `Bearer ${token}` }
+              }).then(() => setOrder({...order, commissionReceived: true}));
+            }}
+            style={{ padding: '0.5rem 1rem', background: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+            Mark Commission Received
+          </button>
+        )}
+      </div>
       
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
         <div>

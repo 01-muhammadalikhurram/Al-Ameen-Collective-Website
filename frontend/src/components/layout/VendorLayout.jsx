@@ -30,8 +30,14 @@ export default function VendorLayout() {
       <aside style={{ width: '250px', background: '#2c3e50', padding: '2rem 1rem', color: '#fff' }}>
         <h2 style={{ marginBottom: '2rem', textAlign: 'center', fontSize: '1.2rem' }}>Vendor Portal</h2>
         <nav>
+          <Link to="/vendor/dashboard" style={{ ...navItemStyle, background: location.pathname.includes('/vendor/dashboard') ? 'rgba(255,255,255,0.1)' : 'transparent' }}>
+            📊 Dashboard
+          </Link>
           <Link to="/vendor/orders" style={{ ...navItemStyle, background: location.pathname.includes('/vendor/orders') ? 'rgba(255,255,255,0.1)' : 'transparent' }}>
             📦 Fulfillment
+          </Link>
+          <Link to="/vendor/payouts" style={{ ...navItemStyle, background: location.pathname.includes('/vendor/payouts') ? 'rgba(255,255,255,0.1)' : 'transparent' }}>
+            💰 Payout History
           </Link>
         </nav>
         <button onClick={handleLogout} style={{ ...navItemStyle, background: 'rgba(255,0,0,0.2)', width: '100%', textAlign: 'left', border: 'none', cursor: 'pointer', marginTop: 'auto' }}>

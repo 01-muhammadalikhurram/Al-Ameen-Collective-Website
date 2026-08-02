@@ -15,13 +15,15 @@ const path = require('path');
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // Routes
-app.use('/api/auth', authRoutes);
 const configRoutes = require('./routes/config.routes');
-app.use('/api/admin/config', configRoutes);
 const productRoutes = require('./routes/product.routes');
-app.use('/api/products', productRoutes);
 const orderRoutes = require('./routes/order.routes');
+const dashboardRoutes = require('./routes/dashboard.routes');
+app.use('/api/auth', authRoutes);
+app.use('/api/admin/config', configRoutes);
+app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

@@ -198,6 +198,51 @@ const updateOrderStatusVendor = async (req, res) => {
   }
 };
 
+const trackOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const order = await prisma.order.findUnique({
+      where: { orderId },
+      include: { items: true }
+    });
+
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // Sanitize output for public
+    const sanitizedOrder = {
+      orderId: order.orderId,
+      customerName: order.customerName,
+      status: order.status,
+      deliveryCharges: order.deliveryCharges,
+      totalCustomerPayable: order.totalCustomerPayable,
+      createdAt: order.createdAt,
+      items: order.items.map(i => ({
+        productName: i.productName,
+        productCode: i.productCode,
+        productImage: i.productImage,
+        quantity: i.quantity,
+        price: i.sellingPriceAtTime / i.quantity
+      }))
+    };
+
+    res.json(sanitizedOrder);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const getVendorPayouts = async (req, res) => {
+  try {
+    const payouts = await prisma.order.findMany({
+      where: { commissionReceived: true },
+      orderBy: { updatedAt: 'desc' }
+    });
+    res.json(payouts);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
   createOrder,
   getAdminOrders,
@@ -205,5 +250,7 @@ module.exports = {
   updateOrderStatusAdmin,
   getVendorOrders,
   getVendorOrderById,
-  updateOrderStatusVendor
+  updateOrderStatusVendor,
+  trackOrder,
+  getVendorPayouts
 };
