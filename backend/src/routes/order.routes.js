@@ -3,7 +3,7 @@ const {
   createOrder, getAdminOrders, getAdminOrderById, updateOrderStatusAdmin,
   getVendorOrders, getVendorOrderById, updateOrderStatusVendor, trackOrder, getVendorPayouts, getVendorOrderByOrderId
 } = require('../controllers/order.controller');
-const { verifyToken, authorizeRoles } = require('../middlewares/auth.middleware');
+const { protect, authorizeRoles } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
@@ -13,15 +13,15 @@ router.post('/', createOrder);
 router.get('/track/:orderId', trackOrder);
 
 // Admin routes
-router.get('/admin', verifyToken, authorizeRoles('ADMIN'), getAdminOrders);
-router.get('/admin/:id', verifyToken, authorizeRoles('ADMIN'), getAdminOrderById);
-router.patch('/admin/:id/status', verifyToken, authorizeRoles('ADMIN'), updateOrderStatusAdmin);
+router.get('/admin', protect, authorizeRoles('ADMIN'), getAdminOrders);
+router.get('/admin/:id', protect, authorizeRoles('ADMIN'), getAdminOrderById);
+router.patch('/admin/:id/status', protect, authorizeRoles('ADMIN'), updateOrderStatusAdmin);
 
 // Vendor routes
-router.get('/vendor/payouts', verifyToken, authorizeRoles('VENDOR'), getVendorPayouts);
-router.get('/vendor/search/:orderId', verifyToken, authorizeRoles('VENDOR'), getVendorOrderByOrderId);
-router.get('/vendor', verifyToken, authorizeRoles('VENDOR'), getVendorOrders);
-router.get('/vendor/:id', verifyToken, authorizeRoles('VENDOR'), getVendorOrderById);
-router.patch('/vendor/:id/status', verifyToken, authorizeRoles('VENDOR'), updateOrderStatusVendor);
+router.get('/vendor/payouts', protect, authorizeRoles('VENDOR'), getVendorPayouts);
+router.get('/vendor/search/:orderId', protect, authorizeRoles('VENDOR'), getVendorOrderByOrderId);
+router.get('/vendor', protect, authorizeRoles('VENDOR'), getVendorOrders);
+router.get('/vendor/:id', protect, authorizeRoles('VENDOR'), getVendorOrderById);
+router.patch('/vendor/:id/status', protect, authorizeRoles('VENDOR'), updateOrderStatusVendor);
 
 module.exports = router;

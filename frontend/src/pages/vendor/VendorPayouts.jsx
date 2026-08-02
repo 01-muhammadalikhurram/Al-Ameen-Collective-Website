@@ -28,7 +28,7 @@ export default function VendorPayouts() {
             <th style={{ padding: '1rem' }}>Order ID</th>
             <th style={{ padding: '1rem' }}>Settled On</th>
             <th style={{ padding: '1rem' }}>Status</th>
-            <th style={{ padding: '1rem' }}>Wholesale Cut</th>
+            <th style={{ padding: '1rem' }}>Commission Paid</th>
           </tr>
         </thead>
         <tbody>
@@ -41,7 +41,7 @@ export default function VendorPayouts() {
                   Commission Settled
                 </span>
               </td>
-              <td style={{ padding: '1rem' }}>PKR {order.totalWholesalePrice}</td>
+              <td style={{ padding: '1rem' }}>PKR {order.totalAdminCommission}</td>
             </tr>
           ))}
           {payouts.length === 0 && (

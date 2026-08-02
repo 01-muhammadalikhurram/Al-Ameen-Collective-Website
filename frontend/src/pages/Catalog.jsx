@@ -5,11 +5,25 @@ import ProductCard from '../components/product/ProductCard';
 
 export default function Catalog() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   
   const searchQ = searchParams.get('search') || '';
   const categoryQ = searchParams.get('category') || '';
+
+  useEffect(() => {
+    // Fetch categories on mount
+    axios.get('http://localhost:5000/api/products').then(res => {
+      const cats = new Set();
+      res.data.forEach(p => {
+        if (p.categories && Array.isArray(p.categories)) {
+          p.categories.forEach(c => cats.add(c));
+        }
+      });
+      setCategories(Array.from(cats));
+    }).catch(console.error);
+  }, []);
 
   useEffect(() => {
     fetchProducts();
@@ -49,9 +63,9 @@ export default function Catalog() {
 
       <div style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '1rem', marginBottom: '2rem', justifyContent: 'center' }}>
         <button onClick={() => handleFilter('')} style={{ padding: '0.5rem 1.5rem', borderRadius: '50px', border: 'none', cursor: 'pointer', background: !categoryQ ? 'var(--primary-maroon)' : '#eee', color: !categoryQ ? '#fff' : '#333' }}>All</button>
-        <button onClick={() => handleFilter('Lawn')} style={{ padding: '0.5rem 1.5rem', borderRadius: '50px', border: 'none', cursor: 'pointer', background: categoryQ === 'Lawn' ? 'var(--primary-maroon)' : '#eee', color: categoryQ === 'Lawn' ? '#fff' : '#333' }}>Lawn</button>
-        <button onClick={() => handleFilter('Winter')} style={{ padding: '0.5rem 1.5rem', borderRadius: '50px', border: 'none', cursor: 'pointer', background: categoryQ === 'Winter' ? 'var(--primary-maroon)' : '#eee', color: categoryQ === 'Winter' ? '#fff' : '#333' }}>Winter</button>
-        <button onClick={() => handleFilter('Unstitched')} style={{ padding: '0.5rem 1.5rem', borderRadius: '50px', border: 'none', cursor: 'pointer', background: categoryQ === 'Unstitched' ? 'var(--primary-maroon)' : '#eee', color: categoryQ === 'Unstitched' ? '#fff' : '#333' }}>Unstitched</button>
+        {categories.map(cat => (
+          <button key={cat} onClick={() => handleFilter(cat)} style={{ padding: '0.5rem 1.5rem', borderRadius: '50px', border: 'none', cursor: 'pointer', background: categoryQ === cat ? 'var(--primary-maroon)' : '#eee', color: categoryQ === cat ? '#fff' : '#333' }}>{cat}</button>
+        ))}
       </div>
 
       {loading ? (
