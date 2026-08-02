@@ -11,9 +11,15 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // Routes
 app.use('/api/auth', authRoutes);
+const configRoutes = require('./routes/config.routes');
+app.use('/api/admin/config', configRoutes);
+const productRoutes = require('./routes/product.routes');
+app.use('/api/products', productRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
