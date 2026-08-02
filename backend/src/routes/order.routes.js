@@ -1,9 +1,23 @@
 const express = require('express');
-const { createOrder } = require('../controllers/order.controller');
+const { 
+  createOrder, getAdminOrders, getAdminOrderById, updateOrderStatusAdmin,
+  getVendorOrders, getVendorOrderById, updateOrderStatusVendor 
+} = require('../controllers/order.controller');
+const { verifyToken, authorizeRoles } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
 // Public route to generate an order
 router.post('/', createOrder);
+
+// Admin routes
+router.get('/admin', verifyToken, authorizeRoles('ADMIN'), getAdminOrders);
+router.get('/admin/:id', verifyToken, authorizeRoles('ADMIN'), getAdminOrderById);
+router.patch('/admin/:id/status', verifyToken, authorizeRoles('ADMIN'), updateOrderStatusAdmin);
+
+// Vendor routes
+router.get('/vendor', verifyToken, authorizeRoles('VENDOR'), getVendorOrders);
+router.get('/vendor/:id', verifyToken, authorizeRoles('VENDOR'), getVendorOrderById);
+router.patch('/vendor/:id/status', verifyToken, authorizeRoles('VENDOR'), updateOrderStatusVendor);
 
 module.exports = router;

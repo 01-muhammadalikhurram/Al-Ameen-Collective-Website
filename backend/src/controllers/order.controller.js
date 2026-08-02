@@ -102,6 +102,108 @@ const createOrder = async (req, res) => {
   }
 };
 
+const getAdminOrders = async (req, res) => {
+  try {
+    const orders = await prisma.order.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const getAdminOrderById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await prisma.order.findUnique({
+      where: { id },
+      include: { items: true }
+    });
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const updateOrderStatusAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, commissionReceived } = req.body;
+    
+    const updateData = {};
+    if (status) updateData.status = status;
+    if (commissionReceived !== undefined) updateData.commissionReceived = commissionReceived;
+
+    const order = await prisma.order.update({
+      where: { id },
+      data: updateData
+    });
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const getVendorOrders = async (req, res) => {
+  try {
+    const orders = await prisma.order.findMany({
+      where: {
+        status: { in: ['CONFIRMED', 'SHIPPED', 'DELIVERED', 'RETURNED'] }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const getVendorOrderById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await prisma.order.findUnique({
+      where: { id },
+      include: { items: true }
+    });
+    
+    if (!order || order.status === 'PENDING' || order.status === 'CANCELLED') {
+      return res.status(404).json({ message: 'Order not accessible by vendor' });
+    }
+    
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const updateOrderStatusVendor = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    
+    // Vendor can only advance to specific states
+    if (!['SHIPPED', 'DELIVERED', 'RETURNED'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status update for Vendor' });
+    }
+
+    const order = await prisma.order.update({
+      where: { id },
+      data: { status }
+    });
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
-  createOrder
+  createOrder,
+  getAdminOrders,
+  getAdminOrderById,
+  updateOrderStatusAdmin,
+  getVendorOrders,
+  getVendorOrderById,
+  updateOrderStatusVendor
 };

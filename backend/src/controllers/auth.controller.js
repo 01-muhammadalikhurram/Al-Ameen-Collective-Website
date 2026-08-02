@@ -83,7 +83,40 @@ const registerAdminSeed = async (req, res) => {
   }
 };
 
+const seedVendor = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Username and password are required' });
+    }
+
+    const existingVendor = await prisma.user.findFirst({
+      where: { role: 'VENDOR' }
+    });
+
+    if (existingVendor) {
+      return res.status(400).json({ message: 'Vendor already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await prisma.user.create({
+      data: {
+        username,
+        password: hashedPassword,
+        role: 'VENDOR'
+      }
+    });
+
+    res.status(201).json({ message: 'Vendor seeded successfully' });
+  } catch (error) {
+    console.error('Seed Error:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
   login,
   registerAdminSeed,
+  seedVendor,
 };
