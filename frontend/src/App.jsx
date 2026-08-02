@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminLayout from './components/layout/AdminLayout';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import ConfigAdmin from './pages/admin/ConfigAdmin';
+import ConfigPage from './pages/admin/ConfigPage';
 import OrderList from './pages/admin/OrderList';
 import OrderDetail from './pages/admin/OrderDetail';
 import ProductList from './pages/admin/ProductList';
@@ -42,7 +42,7 @@ function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="config" element={<ConfigAdmin />} />
+            <Route path="config" element={<ConfigPage />} />
             <Route path="products" element={<ProductList />} />
             <Route path="products/add" element={<ProductForm />} />
             <Route path="orders" element={<OrderList />} />
