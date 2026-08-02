@@ -5,13 +5,23 @@ import ConfigPage from './pages/admin/ConfigPage';
 import ProductList from './pages/admin/ProductList';
 import ProductForm from './pages/admin/ProductForm';
 
+import CustomerLayout from './components/layout/CustomerLayout';
+import Home from './pages/Home';
+import Catalog from './pages/Catalog';
+import ProductDetail from './pages/ProductDetail';
+
 function App() {
   return (
     <Router>
       <div className="app-container">
         <Routes>
-          {/* Public Routes placeholder */}
-          <Route path="/" element={<nav style={{ backgroundColor: 'var(--primary-gold)', color: 'var(--primary-maroon)', padding: '1.5rem 2rem', fontWeight: 'bold' }}><h2>Al Ameen Collective</h2></nav>} />
+          {/* Public Routes */}
+          <Route path="/" element={<CustomerLayout />}>
+            <Route index element={<Home />} />
+            <Route path="catalog" element={<Catalog />} />
+            <Route path="product/:code" element={<ProductDetail />} />
+            <Route path="checkout" element={<div style={{ padding: '5rem', textAlign: 'center' }}><h2>Checkout Placeholder (Sprint 4)</h2></div>} />
+          </Route>
           
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />

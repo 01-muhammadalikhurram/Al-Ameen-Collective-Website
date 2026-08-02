@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { generateProductCode } = require('../utils/codeGenerator');
+const { getSearchResults } = require('../utils/searchEngine');
 const multer = require('multer');
 const path = require('path');
 
@@ -87,9 +88,51 @@ const toggleProductStatus = async (req, res) => {
   }
 };
 
+const getPublicProducts = async (req, res) => {
+  try {
+    const { search, category } = req.query;
+    
+    let products = await prisma.product.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'desc' }
+    });
+    
+    if (category) {
+      products = products.filter(p => p.categories.includes(category));
+    }
+    
+    if (search) {
+      products = getSearchResults(products, search);
+    }
+    
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const getProductByCode = async (req, res) => {
+  try {
+    const { code } = req.params;
+    const product = await prisma.product.findUnique({
+      where: { productCode: code }
+    });
+    
+    if (!product || !product.isActive) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
   createProduct,
   getAdminProducts,
   toggleProductStatus,
-  upload
+  upload,
+  getPublicProducts,
+  getProductByCode
 };
