@@ -1,6 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCartStore } from '../../store/cartStore';
 
 export default function ProductCard({ product }) {
+  const addToCart = useCartStore(state => state.addToCart);
+  const navigate = useNavigate();
   const primaryImage = product.images?.[0] ? `http://localhost:5000${product.images[0]}` : 'https://via.placeholder.com/300x400?text=No+Image';
 
   return (
@@ -34,8 +37,8 @@ export default function ProductCard({ product }) {
         </div>
       </Link>
       <div style={{ padding: '0 1rem 1rem 1rem', display: 'flex', gap: '0.5rem' }}>
-        <button style={{ flex: 1, padding: '0.75rem', background: '#eee', color: '#333', borderRadius: '4px', fontWeight: 'bold' }}>Add to Cart</button>
-        <button style={{ flex: 1, padding: '0.75rem', background: 'var(--primary-maroon)', color: '#fff', borderRadius: '4px', fontWeight: 'bold' }}>Order Now</button>
+        <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToCart(product); alert('Added to cart!'); }} style={{ flex: 1, padding: '0.75rem', background: '#eee', color: '#333', borderRadius: '4px', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>Add to Cart</button>
+        <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToCart(product); navigate('/checkout'); }} style={{ flex: 1, padding: '0.75rem', background: 'var(--primary-maroon)', color: '#fff', borderRadius: '4px', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>Order Now</button>
       </div>
     </div>
   );

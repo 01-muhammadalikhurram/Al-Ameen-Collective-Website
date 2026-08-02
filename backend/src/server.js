@@ -20,6 +20,8 @@ const configRoutes = require('./routes/config.routes');
 app.use('/api/admin/config', configRoutes);
 const productRoutes = require('./routes/product.routes');
 app.use('/api/products', productRoutes);
+const orderRoutes = require('./routes/order.routes');
+app.use('/api/orders', orderRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

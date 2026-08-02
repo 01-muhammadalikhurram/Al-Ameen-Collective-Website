@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useCartStore } from '../store/cartStore';
 
 export default function ProductDetail() {
+  const addToCart = useCartStore(state => state.addToCart);
+  const navigate = useNavigate();
   const { code } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -61,8 +64,8 @@ export default function ProductDetail() {
           </div>
 
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <button style={{ flex: 1, padding: '1rem', background: '#eee', color: '#333', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '4px' }}>Add to Cart</button>
-            <button style={{ flex: 2, padding: '1rem', background: 'var(--primary-maroon)', color: '#fff', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '4px' }}>Order Now</button>
+            <button onClick={() => { addToCart(product); alert('Added to cart!'); }} style={{ flex: 1, padding: '1rem', background: '#eee', color: '#333', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '4px', border: 'none', cursor: 'pointer' }}>Add to Cart</button>
+            <button onClick={() => { addToCart(product); navigate('/checkout'); }} style={{ flex: 2, padding: '1rem', background: 'var(--primary-maroon)', color: '#fff', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '4px', border: 'none', cursor: 'pointer' }}>Order Now</button>
           </div>
         </div>
       </div>

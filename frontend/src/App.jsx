@@ -9,6 +9,8 @@ import CustomerLayout from './components/layout/CustomerLayout';
 import Home from './pages/Home';
 import Catalog from './pages/Catalog';
 import ProductDetail from './pages/ProductDetail';
+import Checkout from './pages/Checkout';
+import OrderSuccess from './pages/OrderSuccess';
 
 function App() {
   return (
@@ -20,7 +22,8 @@ function App() {
             <Route index element={<Home />} />
             <Route path="catalog" element={<Catalog />} />
             <Route path="product/:code" element={<ProductDetail />} />
-            <Route path="checkout" element={<div style={{ padding: '5rem', textAlign: 'center' }}><h2>Checkout Placeholder (Sprint 4)</h2></div>} />
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="order-success" element={<OrderSuccess />} />
           </Route>
           
           {/* Admin Routes */}
