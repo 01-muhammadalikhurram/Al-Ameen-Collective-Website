@@ -31,11 +31,11 @@ const createProduct = async (req, res) => {
 
     const parsedCategories = typeof categories === 'string' ? JSON.parse(categories) : (categories || []);
 
-    const productCode = await generateProductCode(parsedCategories, color, gender);
+    const finalProductCode = req.body.productCode || await generateProductCode(parsedCategories, color, gender);
 
     const product = await prisma.product.create({
       data: {
-        productCode,
+        productCode: finalProductCode,
         name,
         categories: parsedCategories,
         gender,

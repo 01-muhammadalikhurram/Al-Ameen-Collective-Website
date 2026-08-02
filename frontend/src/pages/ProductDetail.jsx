@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
+import ProductCard from '../components/product/ProductCard';
 
 export default function ProductDetail() {
   const addToCart = useCartStore(state => state.addToCart);
   const navigate = useNavigate();
   const { code } = useParams();
   const [product, setProduct] = useState(null);
+  const [similarProducts, setSimilarProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,6 +20,12 @@ export default function ProductDetail() {
     try {
       const res = await axios.get(`http://localhost:5000/api/products/${code}`);
       setProduct(res.data);
+      
+      // Fetch similar products based on the first category
+      if (res.data.categories?.length > 0) {
+        const simRes = await axios.get(`http://localhost:5000/api/products?category=${encodeURIComponent(res.data.categories[0])}`);
+        setSimilarProducts(simRes.data.filter(p => p.productCode !== code).slice(0, 4));
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -69,6 +77,17 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
+      
+      {similarProducts.length > 0 && (
+        <div style={{ marginTop: '4rem', paddingTop: '2rem', borderTop: '1px solid #eee' }}>
+          <h2 style={{ marginBottom: '2rem', color: 'var(--primary-maroon)' }}>Similar Products</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '2rem' }}>
+            {similarProducts.map(p => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

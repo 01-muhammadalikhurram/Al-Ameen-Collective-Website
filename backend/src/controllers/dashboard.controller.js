@@ -3,7 +3,9 @@ const prisma = new PrismaClient();
 
 const getAdminDashboard = async (req, res) => {
   try {
-    const orders = await prisma.order.findMany();
+    const orders = await prisma.order.findMany({
+      include: { items: true }
+    });
     
     const totalOrders = orders.length;
     const totalRevenue = orders.reduce((sum, o) => sum + o.totalCustomerPayable, 0);
@@ -22,12 +24,35 @@ const getAdminDashboard = async (req, res) => {
       return acc;
     }, {});
 
+    const recentOrders = [...orders].sort((a, b) => b.createdAt - a.createdAt).slice(0, 10);
+
+    const productStats = {};
+    orders.forEach(order => {
+      order.items.forEach(item => {
+        if (!productStats[item.productCode]) {
+          productStats[item.productCode] = { name: item.productName, code: item.productCode, sold: 0, returned: 0 };
+        }
+        if (order.status === 'RETURNED' || order.status === 'FILED_FOR_RETURN') {
+          productStats[item.productCode].returned += item.quantity;
+        } else if (order.status !== 'CANCELLED') {
+          productStats[item.productCode].sold += item.quantity;
+        }
+      });
+    });
+
+    const performance = Object.values(productStats);
+    const mostSold = [...performance].sort((a, b) => b.sold - a.sold).slice(0, 5);
+    const mostReturned = [...performance].sort((a, b) => b.returned - a.returned).slice(0, 5);
+
     res.json({
       totalOrders,
       totalRevenue,
       pendingCommission,
       earnedCommission,
-      statusCounts
+      statusCounts,
+      recentOrders,
+      mostSold,
+      mostReturned
     });
   } catch (error) {
     res.status(500).json({ message: 'Internal Server Error' });

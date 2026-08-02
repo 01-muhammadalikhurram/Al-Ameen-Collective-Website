@@ -32,6 +32,11 @@ export default function Checkout() {
       };
       const res = await axios.post('http://localhost:5000/api/orders', payload);
       
+      const adminPhone = import.meta.env.VITE_ADMIN_WHATSAPP || "923000000000";
+      const text = `*New Order:* ${res.data.orderId}\n*Customer:* ${formData.name}\n*Phone:* ${formData.phone}\n*Address:* ${formData.address}\n\n*Items:*\n${items.map(i => `- ${i.quantity}x ${i.name} (${i.productCode})`).join('\n')}`;
+      
+      window.open(`https://wa.me/${adminPhone}?text=${encodeURIComponent(text)}`, '_blank');
+
       clearCart();
       navigate('/order-success', { state: { order: res.data } });
     } catch (err) {

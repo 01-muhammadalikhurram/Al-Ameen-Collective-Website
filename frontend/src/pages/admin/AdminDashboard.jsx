@@ -57,6 +57,55 @@ export default function AdminDashboard() {
           ))}
         </div>
       </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '3rem' }}>
+        <div style={{ ...cardStyle }}>
+          <h3 style={{ marginBottom: '1rem', color: 'var(--primary-maroon)' }}>🔥 Most Sold Products</h3>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {data.mostSold?.map((p, i) => (
+              <li key={p.code} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
+                <span>{i + 1}. {p.name} ({p.code})</span>
+                <span style={{ fontWeight: 'bold' }}>{p.sold} units</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div style={{ ...cardStyle }}>
+          <h3 style={{ marginBottom: '1rem', color: 'red' }}>⚠️ Most Returned Products</h3>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {data.mostReturned?.map((p, i) => (
+              <li key={p.code} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
+                <span>{i + 1}. {p.name} ({p.code})</span>
+                <span style={{ fontWeight: 'bold' }}>{p.returned} units</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div style={{ ...cardStyle, marginTop: '3rem' }}>
+        <h3 style={{ marginBottom: '1rem' }}>Recent Orders</h3>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ background: '#eee', textAlign: 'left' }}>
+              <th style={{ padding: '0.75rem' }}>ID</th>
+              <th style={{ padding: '0.75rem' }}>Customer</th>
+              <th style={{ padding: '0.75rem' }}>Date</th>
+              <th style={{ padding: '0.75rem' }}>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.recentOrders?.map(order => (
+              <tr key={order.id} style={{ borderBottom: '1px solid #ddd' }}>
+                <td style={{ padding: '0.75rem' }}>{order.orderId}</td>
+                <td style={{ padding: '0.75rem' }}>{order.customerName}</td>
+                <td style={{ padding: '0.75rem' }}>{new Date(order.createdAt).toLocaleDateString()}</td>
+                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>{order.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

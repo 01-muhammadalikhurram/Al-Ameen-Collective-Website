@@ -7,7 +7,7 @@ export default function ProductForm() {
   const [formData, setFormData] = useState({
     name: '', categories: '', gender: 'FEMALE', color: '', wholesalePrice: '',
     summary: '', description: '', brand: '', productType: '', fabricType: '',
-    cuttingSize: '', shirtDetails: '', trouserDetails: '', commissionOverride: ''
+    cuttingSize: '', shirtDetails: '', trouserDetails: '', commissionOverride: '', productCode: ''
   });
   const [image, setImage] = useState(null);
   const token = useAuthStore(state => state.token);
@@ -81,6 +81,49 @@ export default function ProductForm() {
         <div style={{ gridColumn: '1 / -1' }}>
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>Full Description *</label>
           <textarea required value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} style={{ width: '100%', padding: '0.5rem', minHeight: '100px' }} />
+        </div>
+
+        <h3 style={{ gridColumn: '1 / -1', marginTop: '1rem', borderBottom: '1px solid #ccc', paddingBottom: '0.5rem' }}>Optional Details</h3>
+        
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Brand</label>
+          <input type="text" value={formData.brand} onChange={e => setFormData({...formData, brand: e.target.value})} style={{ width: '100%', padding: '0.5rem' }} />
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Product Type</label>
+          <select value={formData.productType} onChange={e => setFormData({...formData, productType: e.target.value})} style={{ width: '100%', padding: '0.5rem' }}>
+            <option value="">Select Type</option>
+            <option value="2PC Suit">2PC Suit</option>
+            <option value="3PC Suit">3PC Suit</option>
+            <option value="Single Shirt">Single Shirt</option>
+            <option value="Single Trouser">Single Trouser</option>
+            <option value="Unstitched Fabric">Unstitched Fabric</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Fabric Type</label>
+          <input type="text" value={formData.fabricType} onChange={e => setFormData({...formData, fabricType: e.target.value})} style={{ width: '100%', padding: '0.5rem' }} />
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Cutting / Size</label>
+          <input type="text" value={formData.cuttingSize} onChange={e => setFormData({...formData, cuttingSize: e.target.value})} style={{ width: '100%', padding: '0.5rem' }} />
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Commission Override (PKR)</label>
+          <input type="number" placeholder="Leave blank for Global default" value={formData.commissionOverride} onChange={e => setFormData({...formData, commissionOverride: e.target.value})} style={{ width: '100%', padding: '0.5rem' }} />
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Custom Product Code</label>
+          <input type="text" placeholder="Leave blank to auto-generate" value={formData.productCode} onChange={e => setFormData({...formData, productCode: e.target.value})} style={{ width: '100%', padding: '0.5rem' }} />
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Shirt Details</label>
+          <textarea value={formData.shirtDetails} onChange={e => setFormData({...formData, shirtDetails: e.target.value})} style={{ width: '100%', padding: '0.5rem' }} />
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Trouser Details</label>
+          <textarea value={formData.trouserDetails} onChange={e => setFormData({...formData, trouserDetails: e.target.value})} style={{ width: '100%', padding: '0.5rem' }} />
         </div>
 
         <div>

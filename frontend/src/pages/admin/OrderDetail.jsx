@@ -34,6 +34,12 @@ export default function OrderDetail() {
     }
   };
 
+  const handleCopyLink = () => {
+    const link = `${window.location.origin}/vendor/orders/${order.id}`;
+    navigator.clipboard.writeText(link);
+    alert('Vendor link copied to clipboard!');
+  };
+
   if (!order) return <div>Loading...</div>;
 
   return (
@@ -46,6 +52,7 @@ export default function OrderDetail() {
           {order.status === 'PENDING' && (
             <button onClick={() => updateStatus('CONFIRMED')} style={{ padding: '0.5rem 1rem', background: 'var(--primary-maroon)', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Mark Confirmed</button>
           )}
+          <button onClick={handleCopyLink} style={{ padding: '0.5rem 1rem', background: '#17a2b8', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Copy Vendor Link</button>
         </div>
       </div>
 

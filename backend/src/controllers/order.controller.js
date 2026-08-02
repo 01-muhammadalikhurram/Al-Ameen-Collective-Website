@@ -243,6 +243,19 @@ const getVendorPayouts = async (req, res) => {
   }
 };
 
+const getVendorOrderByOrderId = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const order = await prisma.order.findUnique({ where: { orderId: orderId.toUpperCase() } });
+    if (!order || !['CONFIRMED', 'SHIPPED', 'DELIVERED', 'RETURNED'].includes(order.status)) {
+      return res.status(404).json({ message: 'Order not found or access denied' });
+    }
+    res.json({ id: order.id });
+  } catch (err) {
+    res.status(500).json({ message: 'Error' });
+  }
+};
+
 module.exports = {
   createOrder,
   getAdminOrders,
@@ -252,5 +265,6 @@ module.exports = {
   getVendorOrderById,
   updateOrderStatusVendor,
   trackOrder,
-  getVendorPayouts
+  getVendorPayouts,
+  getVendorOrderByOrderId
 };
