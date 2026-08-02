@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from "../../store/useAuthStore";
 
 export default function VendorLogin() {
   const [username, setUsername] = useState('');

@@ -1,5 +1,5 @@
 import { Outlet, Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from "../../store/useAuthStore";
 
 export default function VendorLayout() {
   const { token, role, logout } = useAuthStore();
